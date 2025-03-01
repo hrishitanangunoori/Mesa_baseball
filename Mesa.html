@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa Baseball Museum - Mobile App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Mesa Baseball Museum</h1>
+        <h2>Explore Baseball History with Our Mobile App</h2>
+    </header>
+
+    <main>
+        <section class="intro">
+            <p>Step back in time and explore Arizona's rich baseball heritage with our interactive mobile application.</p>
+        </section>
+
+        <section class="features">
+            <div class="feature">
+                <h3>Cactus League Hall of Fame</h3>
+                <p>Discover the legends who shaped the Cactus League.</p>
+            </div>
+            <div class="feature">
+                <h3>Historic Memorabilia</h3>
+                <p>View rare artifacts and memorabilia from baseball's golden era.</p>
+            </div>
+            <div class="feature">
+                <h3>Interactive Exhibits</h3>
+                <p>Engage with interactive content that brings history to life.</p>
+            </div>
+        </section>
+
+        <section class="promo-image">
+            <h3>Experience the App</h3>
+            <img src="app-promo.png" alt="Mesa Baseball Museum App Preview">
+        </section>
+
+        <section class="trivia">
+            <h3>Baseball Trivia</h3>
+            <p id="question">Loading question...</p>
+            <ul id="options">
+            </ul>
+            <button onclick="checkAnswer()">Check Answer</button>
+            <button onclick="nextQuestion()">Next</button>
+            <p id="trivia-result"></p>
+        </section>
+
+        <section class="visit-info">
+            <h3>Plan Your Visit</h3>
+            <p><strong>Address:</strong> 2345 N. Horne, Mesa, AZ 85203</p>
+            <p><strong>Hours:</strong> Tuesday - Saturday, 10 AM - 4 PM</p>
+            <p><strong>Contact:</strong> (480) 835-2286</p>
+        </section>
+
+        <section class="newsletter">
+            <h3>Subscribe to Our Newsletter</h3>
+            <p>Stay updated with the latest news and events from the Mesa Baseball Museum.</p>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button onclick="subscribeNewsletter()">Subscribe</button>
+            <p id="subscription-result"></p>
+        </section>
+
+        <section class="testimonials">
+            <h3>Visitor Testimonials</h3>
+            <div id="testimonial-list"></div>
+            <h4>Share Your Experience</h4>
+            <input type="text" id="testimonial-name" placeholder="Your Name" required>
+            <textarea id="testimonial-input" placeholder="Write your testimonial..."></textarea>
+            <button onclick="addTestimonial()">Submit</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mesa Baseball Museum. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "Who holds the record for the most career home runs in Major League Baseball?",
+                options: ["Babe Ruth", "Hank Aaron", "Barry Bonds", "Willie Mays"],
+                answer: "Barry Bonds"
+            },
+            {
+                question: "Which team has won the most World Series championships?",
+                options: ["New York Yankees", "Boston Red Sox", "Los Angeles Dodgers", "Chicago Cubs"],
+                answer: "New York Yankees"
+            },
+            {
+                question: "Who was the first African American player in Major League Baseball?",
+                options: ["Jackie Robinson", "Satchel Paige", "Hank Aaron", "Willie Mays"],
+                answer: "Jackie Robinson"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const questionEl = document.getElementById("question");
+            const optionsEl = document.getElementById("options");
+            optionsEl.innerHTML = "";
+            
+            questionEl.textContent = questions[currentQuestionIndex].question;
+            
+            questions[currentQuestionIndex].options.forEach(option => {
+                const li = document.createElement("li");
+                li.innerHTML = `<input type="radio" name="trivia" value="${option}"> ${option}`;
+                optionsEl.appendChild(li);
+            });
+        }
+
+        function checkAnswer() {
+            const options = document.getElementsByName("trivia");
+            let selectedAnswer = "";
+            for (const option of options) {
+                if (option.checked) {
+                    selectedAnswer = option.value;
+                    break;
+                }
+            }
+            
+            const result = document.getElementById("trivia-result");
+            if (selectedAnswer === questions[currentQuestionIndex].answer) {
+                result.textContent = "Correct!";
+                result.style.color = "green";
+            } else {
+                result.textContent = `Incorrect. The correct answer is ${questions[currentQuestionIndex].answer}.`;
+                result.style.color = "red";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            document.getElementById("trivia-result").textContent = "";
+            loadQuestion();
+        }
+
+        function addTestimonial() {
+            const nameInput = document.getElementById("testimonial-name").value.trim();
+            const testimonialText = document.getElementById("testimonial-input").value.trim();
+            if (testimonialText && nameInput) {
+                const testimonialList = document.getElementById("testimonial-list");
+                const newTestimonial = document.createElement("div");
+                newTestimonial.classList.add("testimonial");
+                newTestimonial.innerHTML = `<p>"${testimonialText}" - ${nameInput}</p>`;
+                testimonialList.appendChild(newTestimonial);
+                document.getElementById("testimonial-name").value = "";
+                document.getElementById("testimonial-input").value = "";
+            }
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
